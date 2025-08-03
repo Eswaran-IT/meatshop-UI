@@ -2,11 +2,81 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import { CartProvider } from "@/contexts/CartContext";
+import OTPForm from "@/components/auth/OTPForm";
+import CustomerLayout from "@/components/layout/CustomerLayout";
+import AdminLayout from "@/components/layout/AdminLayout";
+import HomePage from "@/pages/customer/HomePage";
+import ProductPage from "@/pages/customer/ProductPage";
+import CartPage from "@/pages/customer/CartPage";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import ManageMeats from "@/pages/admin/ManageMeats";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
+
+const ProtectedRoute = ({ children, adminOnly = false }: { children: React.ReactNode, adminOnly?: boolean }) => {
+  const { isAuthenticated, isAdmin, loading } = useAuth();
+  
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+  
+  if (!isAuthenticated) {
+    return <OTPForm onSuccess={() => window.location.reload()} />;
+  }
+  
+  if (adminOnly && !isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return <>{children}</>;
+};
+
+const AppContent = () => {
+  const { isAuthenticated, isAdmin, loading } = useAuth();
+  
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
+  
+  if (!isAuthenticated) {
+    return <OTPForm onSuccess={() => window.location.reload()} />;
+  }
+  
+  return (
+    <Routes>
+      {isAdmin ? (
+        <>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminDashboard />} />
+            <Route path="meats" element={<ManageMeats />} />
+            <Route path="categories" element={<div>Categories Page</div>} />
+            <Route path="offers" element={<div>Offers Page</div>} />
+            <Route path="orders" element={<div>Orders Page</div>} />
+            <Route path="settings" element={<div>Settings Page</div>} />
+          </Route>
+          <Route path="/" element={<Navigate to="/admin" replace />} />
+        </>
+      ) : (
+        <>
+          <Route path="/" element={<CustomerLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="cart" element={<CartPage />} />
+            <Route path="orders" element={<div>Orders Page</div>} />
+            <Route path="profile" element={<div>Profile Page</div>} />
+            <Route path="category/:id" element={<div>Category Page</div>} />
+            <Route path="product/:id" element={<ProductPage />} />
+          </Route>
+          <Route path="/admin/*" element={<Navigate to="/" replace />} />
+        </>
+      )}
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -14,11 +84,11 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <CartProvider>
+            <AppContent />
+          </CartProvider>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
