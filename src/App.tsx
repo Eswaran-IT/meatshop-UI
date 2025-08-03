@@ -13,6 +13,9 @@ import ProductPage from "@/pages/customer/ProductPage";
 import CartPage from "@/pages/customer/CartPage";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import ManageMeats from "@/pages/admin/ManageMeats";
+import ManageCategories from "@/pages/admin/ManageCategories";
+import ManageOffers from "@/pages/admin/ManageOffers";
+import ManageOrders from "@/pages/admin/ManageOrders";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -53,9 +56,9 @@ const AppContent = () => {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
             <Route path="meats" element={<ManageMeats />} />
-            <Route path="categories" element={<div>Categories Page</div>} />
-            <Route path="offers" element={<div>Offers Page</div>} />
-            <Route path="orders" element={<div>Orders Page</div>} />
+            <Route path="categories" element={<ManageCategories />} />
+            <Route path="offers" element={<ManageOffers />} />
+            <Route path="orders" element={<ManageOrders />} />
             <Route path="settings" element={<div>Settings Page</div>} />
           </Route>
           <Route path="/" element={<Navigate to="/admin" replace />} />
