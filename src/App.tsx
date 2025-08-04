@@ -16,6 +16,9 @@ import ManageMeats from "@/pages/admin/ManageMeats";
 import ManageCategories from "@/pages/admin/ManageCategories";
 import ManageOffers from "@/pages/admin/ManageOffers";
 import ManageOrders from "@/pages/admin/ManageOrders";
+import AdminSettings from "@/pages/admin/AdminSettings";
+import OrdersPage from "@/pages/customer/OrdersPage";
+import ProfilePage from "@/pages/customer/ProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,7 +62,7 @@ const AppContent = () => {
             <Route path="categories" element={<ManageCategories />} />
             <Route path="offers" element={<ManageOffers />} />
             <Route path="orders" element={<ManageOrders />} />
-            <Route path="settings" element={<div>Settings Page</div>} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
           <Route path="/" element={<Navigate to="/admin" replace />} />
         </>
@@ -68,8 +71,8 @@ const AppContent = () => {
           <Route path="/" element={<CustomerLayout />}>
             <Route index element={<HomePage />} />
             <Route path="cart" element={<CartPage />} />
-            <Route path="orders" element={<div>Orders Page</div>} />
-            <Route path="profile" element={<div>Profile Page</div>} />
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="profile" element={<ProfilePage />} />
             <Route path="category/:id" element={<div>Category Page</div>} />
             <Route path="product/:id" element={<ProductPage />} />
           </Route>

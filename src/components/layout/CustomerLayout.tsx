@@ -138,8 +138,8 @@ const CustomerLayout: React.FC = () => {
       </header>
 
       <div className="flex">
-        {/* Desktop Sidebar */}
-        <aside className="hidden md:flex w-64 border-r bg-card/50">
+        {/* Desktop Sidebar - Fixed Position */}
+        <aside className="hidden md:block fixed left-0 top-16 w-64 h-[calc(100vh-4rem)] border-r bg-card/50 overflow-y-auto z-40">
           <div className="flex flex-col w-full p-4">
             <nav className="space-y-2">
               {navigation.map((item) => (
@@ -149,8 +149,8 @@ const CustomerLayout: React.FC = () => {
           </div>
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 min-h-screen">
+        {/* Main Content - Offset for sidebar */}
+        <main className="flex-1 min-h-screen md:ml-64">
           <Outlet />
         </main>
       </div>
