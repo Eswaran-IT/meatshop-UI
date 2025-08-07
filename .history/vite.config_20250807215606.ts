@@ -4,7 +4,7 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 export default defineConfig(({ mode }) => ({
-  base: mode === "development" ? "/" : "/meatshop-UI/", // ✅ dynamic base
+  base: "/meatshop-UI/", // ✅ This is REQUIRED for GitHub Pages
   server: {
     host: "::",
     port: 8080,
